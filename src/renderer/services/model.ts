@@ -21,10 +21,10 @@ const TRANSCRIBE_API_PATH = "/api/transcribe";
 const TTS_API_PATH = "/api/tts";
 
 const ATTACHED_SNAPSHOT_SINGLE_LABEL =
-  "[ATTACHED SNAPSHOT: A screenshot the user captured. If the user's message is asking about this snapshot, what they captured, or what is in the screenshot, analyze it fully and answer in detail.]";
+  "[ATTACHED SNAPSHOT: A screenshot the user captured.]";
 
 const LIVE_PREVIEW_LABEL =
-  "[LIVE PREVIEW: A real-time capture of the user's current screen. If the user's message is asking about the live preview, what is on their screen, or what you can see, analyze this image fully and describe it in detail.]";
+  "[LIVE PREVIEW: A real-time capture of the user's current screen. Don't mention anything about the live preview image unless the user explicitly mentions it.]    ]";
 
 // Desktop can call Groq directly. Web deploys can fall back to /api Netlify functions.
 const groq = API_KEY

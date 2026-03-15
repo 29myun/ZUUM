@@ -5,6 +5,8 @@ import {
   onAuthStateChanged,
   updateProfile,
   deleteUser,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
   type User,
 } from "firebase/auth";
 import { doc, setDoc, deleteDoc, serverTimestamp } from "firebase/firestore";
@@ -57,11 +59,17 @@ export function onAuthChange(callback: (user: AppUser | null) => void): () => vo
   });
 }
 
-export async function deleteAccount(uid: string): Promise<void> {
+export async function deleteAccount(uid: string, password: string): Promise<void> {
+  const currentUser = auth.currentUser;
+  if (!currentUser || !currentUser.email) {
+    throw new Error("No authenticated user found.");
+  }
+
+  // Re-authenticate to satisfy Firebase's recent-login requirement.
+  const credential = EmailAuthProvider.credential(currentUser.email, password);
+  await reauthenticateWithCredential(currentUser, credential);
+
   // Keep Firestore and Auth in sync by removing both records.
   await deleteDoc(doc(db, "users", uid));
-  const currentUser = auth.currentUser;
-  if (currentUser) {
-    await deleteUser(currentUser);
-  }
+  await deleteUser(currentUser);
 }

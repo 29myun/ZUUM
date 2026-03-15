@@ -24,19 +24,24 @@ export default function SettingsPage({
   const [confirming, setConfirming] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [password, setPassword] = useState("");
   const [confirmingClear, setConfirmingClear] = useState(false);
   const [clearing, setClearing] = useState(false);
 
   const handleDelete = async () => {
+    if (!password) {
+      setError("Please enter your password to confirm deletion.");
+      return;
+    }
     setDeleting(true);
     setError(null);
     try {
       await deleteAllChats(user.uid);
-      await deleteAccount(user.uid);
+      await deleteAccount(user.uid, password);
       onAccountDeleted();
     } catch (err: any) {
-      if (err?.code === "auth/requires-recent-login") {
-        setError("For security, please sign out, sign back in, and try again.");
+      if (err?.code === "auth/wrong-password" || err?.code === "auth/invalid-credential") {
+        setError("Incorrect password. Please try again.");
       } else {
         setError(err?.message ?? "Failed to delete account.");
       }
@@ -140,10 +145,18 @@ export default function SettingsPage({
             </button>
           ) : (
             <div className="settings-confirm">
-              <span>Are you sure?</span>
+              <span>Enter your password to confirm:</span>
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={deleting}
+                autoFocus
+              />
               <button
                 className="danger"
-                disabled={deleting}
+                disabled={deleting || !password}
                 onClick={handleDelete}
               >
                 {deleting ? "Deleting..." : "Yes, delete everything"}
@@ -151,7 +164,7 @@ export default function SettingsPage({
               <button
                 className="ghost small"
                 disabled={deleting}
-                onClick={() => setConfirming(false)}
+                onClick={() => { setConfirming(false); setPassword(""); setError(null); }}
               >
                 Cancel
               </button>
