@@ -32,8 +32,8 @@ export async function streamGroqChatCompletion(
 
   [...snapshotUrls].forEach((url, i) => {
     const label = snapshotUrls.length === 1
-      ? "[This is a screenshot the user captured and attached to this message. Analyze its contents and incorporate what you see when answering. If the user's question relates to something visible in the screenshot, reference specific details from it.]"
-      : `[This is snapshot ${i + 1} of ${snapshotUrls.length} attached by the user.]`;
+      ? "[ATTACHED SNAPSHOT: A screenshot the user captured. If the user's message is asking about this snapshot, what they captured, or what is in the screenshot, analyze it fully and answer in detail.]"
+      : `[ATTACHED SNAPSHOT ${i + 1} of ${snapshotUrls.length}: If the user's message is asking about the snapshot(s), what they captured, or what is in the screenshot(s), analyze all of them fully and answer in detail.]`;
     content.push({ type: "text", text: label });
     content.push({
       type: "image_url",
@@ -42,7 +42,7 @@ export async function streamGroqChatCompletion(
   });
 
   if (liveFrameUrl) {
-    content.push({ type: "text", text: "[This is a real-time capture of the user's screen. Analyze what's visible and reference specific on-screen details when answering. If the user asks about something on their screen, use this image as your primary source. Only respond if the user mentions anything relating to the ]" });
+    content.push({ type: "text", text: "[LIVE PREVIEW: A real-time capture of the user's current screen. If the user's message is asking about the live preview, what is on their screen, or what you can see, analyze this image fully and describe it in detail.]" });
     content.push({
       type: "image_url",
       image_url: { url: liveFrameUrl },

@@ -920,7 +920,7 @@ export default function App() {
               {chatLog.map((msg, i) => (
                 <div key={i} className={`chat-bubble ${msg.role}`}>
                   <span className="chat-role">
-                    {msg.role === "user" ? "You" : "Assistant"}
+                    {msg.role === "user" ? "You" : "llama-4-scout"}
                   </span>
                   {msg.role === "assistant" ? (
                     <div className="markdown-body">
