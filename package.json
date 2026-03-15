@@ -1,0 +1,33 @@
+{
+  "name": "screen-assist-llm",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Screen share LLM assistant for BCIT Hackathon 2026",
+  "main": "electron/main.js",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "concurrently -k \"vite\" \"wait-on http://127.0.0.1:5173 && electron .\"",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "echo \"No lint configured\""
+  },
+  "dependencies": {
+    "firebase": "^12.10.0",
+    "groq-sdk": "^1.1.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.2.1",
+    "concurrently": "^8.2.2",
+    "electron": "^30.0.0",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.0",
+    "wait-on": "^7.2.0"
+  }
+}
